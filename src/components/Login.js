@@ -1,5 +1,10 @@
-import React,{useState, useEffect} from "react";
-import {executeHelloService, executeJwtAuthenticationService, registerSuccessfulLoginForJwt} from "../apis/authApi";
+import React,{useState} from "react";
+import {
+    adminTest,
+    executeHelloService,
+    executeJwtAuthenticationService,
+    registerSuccessfulLoginForJwt
+} from "../apis/authApi";
 
 const Login = () => {
 
@@ -8,7 +13,7 @@ const Login = () => {
     const [jwtToken, setJwtToken] = useState(localStorage.getItem("jwtToken"));
     const [hasLoginFailed, setHasLoginFailed] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-    const [test, setTest] = useState("");
+
     const nameChange = (e) => {
         setUsername(e.target.value);
     };
@@ -21,20 +26,21 @@ const Login = () => {
         setPassword('');
     };
 
+
     const loginClicked = () => {
-        setUsername(JSON.stringify({username}.username));
-        setPassword(JSON.stringify({password}.password));
-        executeJwtAuthenticationService({username}.username, {password}.password)
+        executeJwtAuthenticationService(username, password)
             .then((response) => {
                 console.log(localStorage);
                 console.log(response);
-                console.log({username}.username);
-                console.log({password}.password);
-                setJwtToken(response.data.jwtToken);
+                console.log(username);
+                console.log(password);
+                console.log(response.headers.authorization);
+                setJwtToken(response.headers.authorization);
                 setShowSuccessMessage(true);
-                console.log({jwtToken});
-                registerSuccessfulLoginForJwt({username}, {jwtToken});
+                console.log(jwtToken);
+                registerSuccessfulLoginForJwt(username, jwtToken);
                 resetNameAndPassword();
+                setHasLoginFailed(false);
             }).catch((error) => {
             console.log(error);
             setHasLoginFailed(true);
@@ -45,9 +51,15 @@ const Login = () => {
         executeHelloService().then((response) => {
             console.log(response);
             console.log(response.data);
-            setTest(response.data);
         });
     };
+
+    const admin = () => {
+        adminTest().then((response) =>{
+            console.log(response);
+            console.log(response.data);
+        });
+    }
 
     return(
         <div className='text-center'>
@@ -58,7 +70,7 @@ const Login = () => {
                 UserName : <input type='text' name='username' value={username} onChange={nameChange} />
                 Password : <input type='password' name='password' value={password} onChange={passwordChange} />
                 <button onClick={loginClicked}>Login</button>
-                <button onClick={Hello}>Hello</button>
+                <button onClick={admin}>Admin</button>
             </div>
         </div>
     )

@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from "react";
+import React,{useState} from "react";
 import './App.css';
 import axios from "axios";
 import {
@@ -9,27 +9,37 @@ import {
 import Header from "./components/Header";
 import User from "./components/User";
 import Login from "./components/Login";
+import ListBoard from "./components/ListBoard";
+import Logout from "./components/Logout";
+import {isUserLoggedIn} from "./apis/authApi";
+import Navbar from "./components/Navbar";
+import Home from "./components/Home";
 
 function App() {
 
-  const [message, setMessage] = useState("");
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    axios.get("/api/hello")
-        .then((response) => {
-          setMessage(response.data)
-        });
-  });
-
+    const loggedIn = isUserLoggedIn();
 
   return (
       <Router>
-        <Header />
-        <Route>
-          <User path='/'/>
-        </Route>
-          <Login />
+          <div className='app'>
+              <Navbar />
+              <div className='container'>
+                  <Switch>
+                      <Route path='/' exact>
+                          <Home/>
+                      </Route>
+                      <Route path='/login' exact>
+                          {loggedIn &&<Login />}
+                      </Route>
+                      <Route path='/logout' exact>
+                          {!loggedIn &&<Logout />}
+                      </Route>
+                      <Route path='/listboard' exact>
+                          <ListBoard />
+                      </Route>
+                  </Switch>
+              </div>
+          </div>
       </Router>
   );
 }

@@ -15,11 +15,23 @@ export const executeHelloService = () => {
 
 };
 
+export const adminTest = () => {
+
+    const username = localStorage.getItem('authenticatedUser')
+
+    console.log('Admin Test', username);
+    const response = axios.get('http://localhost:8080/api/admin')
+
+    return response;
+};
+
+
 export const registerSuccessfulLoginForJwt = (username, jwtToken) => {
 
-    console.log("===registerSuccessfulLoginForJwt===")
+    console.log("===registerSuccessfulLoginForJwt start")
     localStorage.setItem('jwtToken', jwtToken);
     localStorage.setItem('authenticatedUser', username);
+    console.log('===registerSuccessfulLoginForJwt end')
     setupAxiosInterceptors();
 
 }
@@ -35,18 +47,20 @@ export const setupAxiosInterceptors = () => {
     axios.interceptors.request.use(
         config => {
             console.log("config");
+            console.log(config);
             const jwtToken = localStorage.getItem('jwtToken');
+            console.log(localStorage.getItem('jwtToken'))
             if (jwtToken) {
-                config.headers['Authorization'] = 'Bearer=' + jwtToken;
+                console.log('setupAxiosInterceptors token');
+                console.log(jwtToken);
+                config.headers['Authorization'] = jwtToken;
             }
-
             return config;
         },
         error => {
-            console.log("setupAxiosInterceptors");
+            console.log("setupAxiosInterceptors error");
             Promise.reject(error)
         });
-
 };
 
 export const logout = () => {
@@ -59,12 +73,11 @@ export const logout = () => {
 export const isUserLoggedIn = () => {
 
     const jwtToken = localStorage.getItem('jwtToken');
-    console.log("===UserloggedInCheck===");
+    console.log("=== UserloggedInCheck ===");
     console.log(jwtToken);
     if (jwtToken) {
         return true;
     }
-
     return false;
 
 };
@@ -72,7 +85,8 @@ export const isUserLoggedIn = () => {
 export const getLoggedInUserName = () => {
 
     let user = localStorage.getItem('authenticatedUser');
-    if(user===null) return '';
+    if(user === null)
+        return '';
     return user;
 
 }
@@ -80,3 +94,5 @@ export const getLoggedInUserName = () => {
 export const request = options => {
 
 };
+
+
