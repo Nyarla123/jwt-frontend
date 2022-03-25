@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import {isUserLoggedIn} from "../apis/authApi";
+
 const Navbar = () => {
     return (
         <nav className="navbar navbar-expand-sm navbar-light bg-light">
@@ -15,22 +17,22 @@ const Navbar = () => {
             >
                 <span className="navbar-toggler-icon"></span>
             </button>
+
             <div className="collapse navbar-collapse" id="navbarNav">
                 <ul className="navbar-nav">
+                {isUserLoggedIn &&
                     <li className="nav-item">
                         <NavLink
                             className="nav-link"
                             to="/login"
-                            activeClassName="active"
                         >
                             login
                         </NavLink>
-                    </li>
+                    </li>}
                     <li className="nav-item">
                         <NavLink
                             className="nav-link"
                             to="/logout"
-                            activeClassName="active"
                         >
                             logout
                         </NavLink>
@@ -39,7 +41,6 @@ const Navbar = () => {
                         <NavLink
                             className="nav-link"
                             to="/listboard"
-                            activeClassName="listboard"
                         >
                             listBoard
                         </NavLink>

@@ -1,5 +1,5 @@
 import React,{useState} from "react";
-import {adminTest} from "../apis/authApi";
+import {adminTest} from "../apis/userApi";
 import styles from '../styles/ListBoard.module.css';
 
 const ListBoard = () => {

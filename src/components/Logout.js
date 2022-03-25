@@ -1,4 +1,4 @@
-import React,{Fragment, useEffect} from "react";
+import React,{ useEffect} from "react";
 
 import {logout} from "../apis/authApi";
 import styles from '../styles/Logout.module.css';
@@ -7,7 +7,8 @@ const Logout = () => {
 
     useEffect(() => {
         logout();
-    });
+        console.log('logout');
+    },[logout]);
 
     return (
         <div className={styles.logout}>

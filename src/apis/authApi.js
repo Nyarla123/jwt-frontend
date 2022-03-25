@@ -3,8 +3,8 @@ import axios from 'axios';
 export const executeJwtAuthenticationService = (username, password) => {
 
     return axios.post('http://localhost:8080/login', {
-        'username' : username,
-        'password' : password
+        username,
+        password
     });
 };
 
@@ -13,16 +13,6 @@ export const executeHelloService = () => {
     console.log("===Hello===");
     return axios.get('http://localhost:8080/api/hello');
 
-};
-
-export const adminTest = () => {
-
-    const username = localStorage.getItem('authenticatedUser')
-
-    console.log('Admin Test', username);
-    const response = axios.get('http://localhost:8080/api/admin')
-
-    return response;
 };
 
 
@@ -36,37 +26,29 @@ export const registerSuccessfulLoginForJwt = (username, jwtToken) => {
 
 }
 
-export const createJwtToken = (jwtToken) => {
-
-    return 'Bearer=' + jwtToken;
-
-}
-
 export const setupAxiosInterceptors = () => {
     console.log("setupAxiosInterceptors Start")
     axios.interceptors.request.use(
         config => {
-            console.log("config");
-            console.log(config);
+            console.log('config start');
             const jwtToken = localStorage.getItem('jwtToken');
-            console.log(localStorage.getItem('jwtToken'))
+            console.log(jwtToken);
             if (jwtToken) {
-                console.log('setupAxiosInterceptors token');
-                console.log(jwtToken);
                 config.headers['Authorization'] = jwtToken;
+                console.log(config);
+                return config;
             }
-            return config;
         },
         error => {
             console.log("setupAxiosInterceptors error");
-            Promise.reject(error)
+            return Promise.reject(error);
         });
 };
 
 export const logout = () => {
 
-    localStorage.removeItem("authenticatedUser");
     localStorage.removeItem("jwtToken");
+    localStorage.removeItem("authenticatedUser");
 
 };
 
@@ -91,8 +73,23 @@ export const getLoggedInUserName = () => {
 
 }
 
-export const request = options => {
+export const createJwtToken = (jwtToken) => {
 
+    return 'Bearer=' + jwtToken;
+
+}
+
+/* 회원가입 API */
+export const regist = async (username, password) => {
+    let result = false;
+
+    await axios.post('http://localhost:8000/api/save', {
+        username,
+        password,
+    }).then(res => {
+        result = true;
+    }, error => {
+        alert('회원가입에 실패했습니다.');
+    });
+    return result;
 };
-
-

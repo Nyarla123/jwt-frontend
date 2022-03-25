@@ -17,7 +17,6 @@ import Home from "./components/Home";
 
 function App() {
 
-    const loggedIn = isUserLoggedIn();
 
   return (
       <Router>
@@ -29,10 +28,10 @@ function App() {
                           <Home/>
                       </Route>
                       <Route path='/login' exact>
-                          {loggedIn &&<Login />}
+                         <Login />
                       </Route>
                       <Route path='/logout' exact>
-                          {!loggedIn &&<Logout />}
+                          <Logout />
                       </Route>
                       <Route path='/listboard' exact>
                           <ListBoard />
